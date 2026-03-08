@@ -122,3 +122,22 @@ Alternatively, if `AllowOverride All` is set, you can just place an `.htaccess` 
   RewriteRule . /index.html [L]
 </IfModule>
 ```
+
+---
+
+## 4. Strategic Architecture: Why Supabase?
+For a commercial application like Rogue Workers, relying on Supabase natively (rather than linking a custom backend database to external auth providers) offers massive strategic advantages for growth, cost, and data security:
+
+### 1. Unified Authentication & Identity
+By routing everything—including Google Auth—through Supabase, the platform maintains a single source of truth (`auth.users`). You don't have to build complex logic to merge accounts or track users across a custom backend and an external OAuth provider. Supabase handles the cryptographic verification of Google's tokens and instantly issues secure JWTs for your application. If you later want to add LinkedIn or GitHub login, it requires zero architecture changes.
+
+### 2. Built-in Security & Data Protection (RLS)
+Supabase utilizes PostgreSQL's native **Row Level Security (RLS)**. Because Supabase handles the authentication JWT, the database instantly knows *exactly* which user is making a query. This means you can write simple SQL rules preventing unauthorized access at the database level.
+
+### 3. Preventing Data Scraping for Cheaper
+A major threat to platforms like levels.fyi is automated scraping of proprietary salary data. 
+*   Setting up a custom enterprise-grade API gateway to block scraping on a traditional architecture is expensive and complex. 
+*   With Supabase, you can leverage native rate limiting, edge network protections, and strict RLS policies to ensure only verified, authenticated users can read sensitive salary records. You secure the data at the lowest possible level (the database) for a fraction of the cost of building a custom API fortress.
+
+### 4. Speed to Market vs. Custom Infrastructure
+Messing with a custom production database setup (e.g., raw RDS, ArgoCD, custom Express/Go APIs, Redis caching) costs thousands of dollars a month in DevOps time and absolute infrastructure costs. Supabase provides an enterprise-ready PostgreSQL instance, a real-time API, and an authentication server immediately out of the box. This allows the team to focus entirely on product features and data quality rather than backend plumbing, accelerating the path to commercial viability.
