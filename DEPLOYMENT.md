@@ -123,6 +123,19 @@ Alternatively, if `AllowOverride All` is set, you can just place an `.htaccess` 
 </IfModule>
 ```
 
+### Option C: Netlify Deployment
+Deploying to Netlify is the easiest and recommended approach for this Vite SPA.
+
+1. **Routing Fix (`_redirects`):** We have already included a `public/_redirects` file in this repository. When Vite builds the app, it copies this file to the `dist` folder. Netlify reads it to ensure that all routes correctly fall back to `index.html`.
+2. **Environment Variables:**
+   - In your Netlify Site Dashboard, navigate to **Site Settings > Environment Variables**.
+   - Add your two variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
+3. **Build Settings:**
+   - Base Directory: `Not set`
+   - Build Command: `npm run build`
+   - Publish Directory: `dist`
+4. **Deploy:** Connect your GitHub repository to Netlify, and it will automatically build and deploy the app perfectly.
+
 ---
 
 ## 4. Strategic Architecture: Why Supabase?
